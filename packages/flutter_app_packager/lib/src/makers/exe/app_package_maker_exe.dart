@@ -4,6 +4,7 @@ import 'package:flutter_app_packager/src/api/app_package_maker.dart';
 import 'package:flutter_app_packager/src/makers/exe/inno_setup/inno_setup_compiler.dart';
 import 'package:flutter_app_packager/src/makers/exe/inno_setup/inno_setup_script.dart';
 import 'package:flutter_app_packager/src/makers/exe/make_exe_config.dart';
+import 'package:flutter_app_packager/src/makers/windows/windows_msvc_runtime.dart';
 import 'package:io/io.dart';
 
 class AppPackageMakerExe extends AppPackageMaker {
@@ -39,6 +40,7 @@ class AppPackageMakerExe extends AppPackageMaker {
   }) async {
     Directory packagingDirectory = makeConfig.packagingDirectory;
     copyPathSync(appDirectory.path, packagingDirectory.path);
+    WindowsMsvcRuntime.copyTo(packagingDirectory, arch: makeConfig.arch);
 
     InnoSetupScript script = InnoSetupScript.fromMakeConfig(makeConfig);
     InnoSetupCompiler compiler = InnoSetupCompiler();

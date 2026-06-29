@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:archive/archive_io.dart';
 import 'package:flutter_app_packager/src/api/app_package_maker.dart';
+import 'package:flutter_app_packager/src/makers/windows/windows_msvc_runtime.dart';
 import 'package:shell_executor/shell_executor.dart';
 
 class AppPackageMakerZip extends AppPackageMaker {
@@ -22,6 +23,10 @@ class AppPackageMakerZip extends AppPackageMaker {
   Future<MakeResult> make(MakeConfig config) async {
     Directory appDirectory = config.buildOutputDirectory;
     Directory packagingDirectory = appDirectory;
+
+    if (platform == 'windows') {
+      WindowsMsvcRuntime.copyTo(appDirectory, arch: config.arch);
+    }
 
     if (platform == 'macos') {
       // 由于使用 archive 在压缩时会导致 app 损坏，所以这里使用 7z 压缩。
